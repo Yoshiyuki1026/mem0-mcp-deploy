@@ -152,9 +152,11 @@ def create_starlette_app(mcp_server: Server, *, debug: bool = False) -> Starlett
     )
 
 
-if __name__ == "__main__":
-    mcp_server = mcp._mcp_server
+# Export app for Render
+mcp_server = mcp._mcp_server
+app = create_starlette_app(mcp_server, debug=False)
 
+if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description='Run MCP SSE-based server')

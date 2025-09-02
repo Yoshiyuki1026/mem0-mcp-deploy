@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: mem0-mcp
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MEM0_API_KEY
+        value: m0-BQovUi42wtOQZP9jSOyKnKdwWtpf97ZFDtfBuBi8
+      - key: PYTHON_VERSION
+        value: 3.12.0
