@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.9"
-    }
-  },
   "builds": [
     {
       "src": "api/index.py",
@@ -19,8 +14,5 @@
       "src": "/messages/(.*)",
       "dest": "/api/index.py"
     }
-  ],
-  "env": {
-    "MEM0_API_KEY": "m0-BQovUi42wtOQZP9jSOyKnKdwWtpf97ZFDtfBuBi8"
-  }
+  ]
 }
