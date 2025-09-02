@@ -5,7 +5,7 @@ from starlette.requests import Request
 from starlette.routing import Mount, Route
 from mcp.server import Server
 import uvicorn
-from mem0 import MemoryClient
+from mem0ai import MemoryClient
 from dotenv import load_dotenv
 import json
 
