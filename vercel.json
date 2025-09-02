@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "main.py": {
+      "runtime": "python3.12"
+    }
+  },
+  "env": {
+    "MEM0_API_KEY": "m0-BQovUi42wtOQZP9jSOyKnKdwWtpf97ZFDtfBuBi8"
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.12"
+    }
+  }
+}
