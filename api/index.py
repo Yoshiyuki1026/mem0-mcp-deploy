@@ -4,7 +4,6 @@ from mcp.server.sse import SseServerTransport
 from starlette.requests import Request
 from starlette.routing import Mount, Route
 from mcp.server import Server
-from mem0ai import MemoryClient
 from dotenv import load_dotenv
 import json
 import os
@@ -15,9 +14,11 @@ load_dotenv()
 mcp = FastMCP("mem0-mcp")
 
 # Initialize mem0 client and set default user
-mem0_client = MemoryClient()
-DEFAULT_USER_ID = "cursor_mcp"
-CUSTOM_INSTRUCTIONS = """
+try:
+    from mem0ai import MemoryClient
+    mem0_client = MemoryClient()
+    DEFAULT_USER_ID = "cursor_mcp"
+    CUSTOM_INSTRUCTIONS = """
 Extract the Following Information:  
 
 - Code Snippets: Save the actual code for future reference.  
@@ -25,7 +26,13 @@ Extract the Following Information:
 - Related Technical Details: Include information about the programming language, dependencies, and system specifications.  
 - Key Features: Highlight the main functionalities and important aspects of the snippet.
 """
-mem0_client.update_project(custom_instructions=CUSTOM_INSTRUCTIONS)
+    mem0_client.update_project(custom_instructions=CUSTOM_INSTRUCTIONS)
+    MEM0_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: mem0ai not available: {e}")
+    mem0_client = None
+    DEFAULT_USER_ID = "cursor_mcp"
+    MEM0_AVAILABLE = False
 
 @mcp.tool(
     description="""Add a new coding preference to mem0. This tool stores code snippets, implementation details,
@@ -44,6 +51,8 @@ mem0_client.update_project(custom_instructions=CUSTOM_INSTRUCTIONS)
 )
 async def add_coding_preference(text: str) -> str:
     """Add a new coding preference to mem0."""
+    if not MEM0_AVAILABLE:
+        return "Error: mem0ai is not available in this environment"
     try:
         messages = [{"role": "user", "content": text}]
         mem0_client.add(messages, user_id=DEFAULT_USER_ID, output_format="v1.1")
@@ -56,6 +65,8 @@ async def add_coding_preference(text: str) -> str:
 )
 async def get_all_coding_preferences() -> str:
     """Get all coding preferences for the default user."""
+    if not MEM0_AVAILABLE:
+        return "Error: mem0ai is not available in this environment"
     try:
         memories = mem0_client.get_all(user_id=DEFAULT_USER_ID, page=1, page_size=50)
         flattened_memories = [memory["memory"] for memory in memories["results"]]
@@ -68,6 +79,8 @@ async def get_all_coding_preferences() -> str:
 )
 async def search_coding_preferences(query: str) -> str:
     """Search coding preferences using semantic search."""
+    if not MEM0_AVAILABLE:
+        return "Error: mem0ai is not available in this environment"
     try:
         memories = mem0_client.search(query, user_id=DEFAULT_USER_ID, output_format="v1.1")
         flattened_memories = [memory["memory"] for memory in memories["results"]]
