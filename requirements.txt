@@ -1,6 +1,7 @@
-fastapi==0.115.6
-uvicorn==0.35.0
 mem0ai==0.1.116
-python-dotenv==1.1.1
 mcp==1.13.1
-sse-starlette==3.0.2
+fastapi
+uvicorn
+python-dotenv
+starlette
+sse-starlette
